@@ -1,0 +1,31 @@
+import requests
+import pandas as pd
+
+url = 'https://dashboard.saskatchewan.ca/api/health/subgeography/summary'
+
+response = requests.get(url.format())
+if response.status_code != 200:
+    print("FAILED")
+    response.raise_for_status()
+
+results = response.json().keys()
+results
+
+subgeographies = response.json()
+subgeographies
+
+from pandas import json_normalize
+df_northwest = json_normalize(subgeographies['subgeographies'])
+
+df_livingsky = df_northwest.iloc[5:9], df_northwest.iloc[16:17]
+df_livingsky
+
+
+Output
+(              id          name  newCases  activeCases  population
+ 5  subNorthWest1  North West 1         8          102       11073
+ 6  subNorthWest2  North West 2        46          360       30490
+ 7  subNorthWest3  North West 3        26           95       17096
+ 8  subNorthWest4  North West 4        22          139       23727,
+                  id            name  newCases  activeCases  population
+ 16  subCentralWest1  Central West 1         1           57       24170)
